@@ -192,4 +192,57 @@ class Iamport
             return new Result(false, null, $e);
         }
     }
+
+    /**
+     * 구매자에 대해 결제 및 빌링키 발급,저장
+     *
+     * @param $customerUid
+     * @param $cardNumber
+     * @param $expiry
+     * @param $birth
+     * @param null $pwd2Digit
+     * @param null $customerName
+     * @param null $customerTel
+     * @param null $customerEmail
+     * @param null $customerAddress
+     * @param null $customerPostcode
+     * @return Result
+     */
+    public function addChargeSubscribeCustomer($customerUid, $merchantUid, $amount, $orderName, $cardNumber, $expiry, $birth, $pwd2Digit = null, $customerName = null, $customerTel = null, $customerEmail = null, $customerAddress = null, $customerPostcode = null)
+    {
+        $params = [
+            'customer_uid' => $customerUid,
+            'merchant_uid' => $merchantUid,
+            'amount' => $amount,
+            'name' => $orderName,
+            'card_number' => $cardNumber,
+            'expiry' => $expiry,
+            'birth' => $birth
+        ];
+        if (!empty($pwd2Digit)) {
+            $params['pwd_2digit'] = $pwd2Digit;
+        }
+        if (!empty($customerName)) {
+            $params['customer_name'] = $customerName;
+        }
+        if (!empty($customerEmail)) {
+            $params['customer_email'] = $customerEmail;
+        }
+        if (!empty($customerTel)) {
+            $params['customer_tel'] = $customerTel;
+        }
+        if (!empty($customerAddress)) {
+            $params['customer_addr'] = $customerAddress;
+        }
+        if (!empty($customerPostcode)) {
+            $params['customer_postcode'] = $customerPostcode;
+        }
+
+        try {
+            $response = $this->client->authRequest('POST', '/subscribe/payments/onetime', $params);
+            return new Result(true, $response);
+        } catch (Exception $e) {
+            return new Result(false, null, $e);
+        }
+    }
 }
