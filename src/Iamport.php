@@ -278,7 +278,7 @@ class Iamport
 
         try {
             $response = $this->client->authRequest('POST', '/subscribe/payments/schedule', $params);
-            $payment = new Payment($response);
+            $payment = new Payment($response[0]);
             return new Result(true, $payment);
         } catch (Exception $e) {
             return new Result(false, null, $e);
