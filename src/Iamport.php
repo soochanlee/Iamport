@@ -273,7 +273,7 @@ class Iamport
 
         $params = [
             'customer_uid' => $customerUid,
-            'schedules' => [$schedules]
+            'schedules' => [$schedule]
         ];
 
         try {
