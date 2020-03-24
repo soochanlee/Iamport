@@ -245,4 +245,62 @@ class Iamport
             return new Result(false, null, $e);
         }
     }
+
+    public function schedule($customerUid, $merchantUid, $amount, $orderName, $scheduleAt, $buyerName = null, $buyerEmail = null, $buyerTel = null, $buyerAddress = null, $buyerPostcode = null)
+    {
+        $schedule = [
+            'merchant_uid' => $merchantUid,
+            'schedule_at' => $scheduleAt,
+            'amount' => $amount,
+            'name' => $orderName
+        ];
+
+        if (!empty($buyerName)) {
+            $schedule['buyer_name'] = $buyerName;
+        }
+        if (!empty($buyerEmail)) {
+            $schedule['buyer_email'] = $buyerEmail;
+        }
+        if (!empty($buyerTel)) {
+            $schedule['buyer_tel'] = $buyerTel;
+        }
+        if (!empty($buyerAddress)) {
+            $schedule['buyer_addr'] = $buyerAddress;
+        }
+        if (!empty($buyerPostcode)) {
+            $schedule['buyer_postcode'] = $buyerPostcode;
+        }
+
+        $params = [
+            'customer_uid' => $customerUid,
+            'schedules' => [$schedules]
+        ];
+
+        try {
+            $response = $this->client->authRequest('POST', '/subscribe/payments/schedule', $params);
+            $payment = new Payment($response);
+            return new Result(true, $payment);
+        } catch (Exception $e) {
+            return new Result(false, null, $e);
+        }
+    }
+
+    public function unschedule($customerUid, $merchantUid = null)
+    {
+        $params = [
+            'customer_uid' => $customerUid,
+        ];
+
+        if (!empty($merchantUid)) {
+            $params['merchant_uid'] = $merchantUid;
+        }
+
+        try {
+            $response = $this->client->authRequest('POST', '/subscribe/payments/unschedule', $params);
+            $payment = new Payment($response);
+            return new Result(true, $payment);
+        } catch (Exception $e) {
+            return new Result(false, null, $e);
+        }
+    }
 }
