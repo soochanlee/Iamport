@@ -63,14 +63,22 @@ class Iamport
      * @param $reason
      * @return Result
      */
-    public function cancelPayment($impUid, $amount, $reason)
+    public function cancelPayment($impUid, $amount, $reason, $refund_holder = null, $refund_bank = null, $refund_account = null)
     {
         try {
-            $response = $this->client->authRequest('POST', '/payments/cancel', [
+            $data = [
                 'imp_uid' => $impUid,
                 'amount' => $amount,
                 'reason' => $reason
-            ]);
+            ];
+            if ($refund_holder)
+                $data['refund_holder'] = $refund_holder;
+            if ($refund_bank)
+                $data['refund_bank'] = $refund_bank;
+            if ($refund_account)
+                $data['refund_account'] = $refund_account;
+
+            $response = $this->client->authRequest('POST', '/payments/cancel', $data);
             $payment = new Payment($response);
             return new Result(true, $payment);
         } catch (Exception $e) {
