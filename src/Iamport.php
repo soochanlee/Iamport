@@ -63,14 +63,17 @@ class Iamport
      * @param $reason
      * @return Result
      */
-    public function cancelPayment($impUid, $amount, $reason, $refund_holder = null, $refund_bank = null, $refund_account = null)
+    public function cancelPayment($impUid, $amount, $reason, $refund_holder = null, $refund_bank = null, $refund_account = null, $merchantUid = null)
     {
         try {
             $data = [
-                'imp_uid' => $impUid,
                 'amount' => $amount,
                 'reason' => $reason
             ];
+            if ($impUid)
+                $data['imp_uid'] = $impUid;
+            if ($merchantUid)
+                $data['merchant_uid'] = $merchantUid;
             if ($refund_holder)
                 $data['refund_holder'] = $refund_holder;
             if ($refund_bank)
