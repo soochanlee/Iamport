@@ -151,7 +151,7 @@ class Iamport
      * @param null $customerPostcode
      * @return Result
      */
-    public function addSubscribeCustomer($customerUid, $cardNumber, $expiry, $birth, $pwd2Digit = null, $customerName = null, $customerTel = null, $customerEmail = null, $customerAddress = null, $customerPostcode = null)
+    public function addSubscribeCustomer($customerUid, $cardNumber, $expiry, $birth, $pwd2Digit = null, $customerName = null, $customerTel = null, $customerEmail = null, $customerAddress = null, $customerPostcode = null, $pg = null)
     {
         $params = [
             'customer_uid' => $customerUid,
@@ -176,6 +176,10 @@ class Iamport
         }
         if (!empty($customerPostcode)) {
             $params['customer_postcode'] = $customerPostcode;
+        }
+
+        if (!empty($pg)) {
+            $params['pg'] = $pg;
         }
 
         try {
