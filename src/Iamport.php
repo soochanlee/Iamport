@@ -103,7 +103,7 @@ class Iamport
      * @param null $buyerPostcode
      * @return Result
      */
-    public function subscribeAgain($customerUid, $merchantUid, $amount, $orderName, $buyerName = null, $buyerEmail = null, $buyerTel = null, $buyerAddress = null, $buyerPostcode = null)
+    public function subscribeAgain($customerUid, $merchantUid, $amount, $orderName, $buyerName = null, $buyerEmail = null, $buyerTel = null, $buyerAddress = null, $buyerPostcode = null, $customParams = null)
     {
         $params = [
             'customer_uid' => $customerUid,
@@ -125,6 +125,10 @@ class Iamport
         }
         if (!empty($buyerPostcode)) {
             $params['buyer_postcode'] = $buyerPostcode;
+        }
+
+        if (!empty($customParams)) {
+            $params = array_merge($params, $customParams);
         }
 
         try {
