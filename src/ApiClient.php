@@ -14,11 +14,14 @@ class ApiClient
 
     private $accessToken = null;
     private $accessTokenExpiredAt = null;
+    private $tierCode = null;
 
     public function __construct(array $config = [])
     {
         $this->apiKey = $config['apiKey'];
         $this->apiSecret = $config['apiSecret'];
+        if (isset($config['tierCode']) AND $config['tierCode'])
+            $this->tierCode = $config['tierCode'];
     }
 
     /**
@@ -35,6 +38,8 @@ class ApiClient
     {
         $accessToken = $this->getAccessToken();
         $headers[] = 'Authorization: ' . $accessToken;
+        if ($this->tierCode)
+            $headers[] = 'Tier: '.$this->tierCode;
 
         return $this->request($method, $uri, $params, $headers);
     }
